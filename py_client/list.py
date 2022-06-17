@@ -4,7 +4,7 @@ import requests
 
 """GET whit Django Rest Framework"""
 print('-'*20 + 'GET List Create API View' + '-'*20)
-endpoint = "http://localhost:8000/api/products/list_create/"
+endpoint = "http://localhost:8000/api/products/"
 
 data = {
     'title': 'This field is done',
