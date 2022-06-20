@@ -14,6 +14,9 @@ from .serializers import ProductSerializer
 # models
 from .models import Product
 
+# permissions
+from . permissions import IsStaffEditorPermission
+
 
 # View for create an instance on the DB
 class ProductCreateAPIView(generics.CreateAPIView):
@@ -77,7 +80,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     @cache_control(no_cache=True, must_revalidate=True, no_store=True)
     def perform_create(self, serializer):
