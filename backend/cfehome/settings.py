@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     #django rest framework
     'rest_framework',
+    'rest_framework.authtoken',  # migrate changes to database
 
     #my apps
 
@@ -129,3 +130,26 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# DjangoRestFramework settings
+
+"""if DEBUG:
+    auth_clases = [
+        "api.authentication.TokenAuthentication",
+    ]
+else:
+    auth_clases = [
+        "rest_framework.authentication.SessionAuthentication",
+        "api.authentication.TokenAuthentication",
+    ]"""
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES" : [
+        "rest_framework.authentication.SessionAuthentication",
+        "api.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+
+}

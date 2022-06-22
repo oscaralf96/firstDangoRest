@@ -1,17 +1,32 @@
 import requests
+from getpass import getpass
 
+"""Get Django Rest Framework Auth Token"""
+print('-'*20 + 'Get Django Rest Framework Auth Token' + '-'*20 + '\n')
 
+auth_endpoint = "http://localhost:8000/api/auth/"
+username = "cfe"
+password = "123"  # getpass()
 
-"""GET whit Django Rest Framework"""
-print('-'*20 + 'GET List Create API View' + '-'*20)
-endpoint = "http://localhost:8000/api/products/"
+auth_response = requests.post(auth_endpoint, json={'username': username, 'password': password})
+print(auth_response.json())
 
-data = {
-    'title': 'This field is done',
-    'price': 32.00
-}
+if auth_response.status_code == 200:
 
-get_response = requests.get(endpoint, json=data)
-# print(get_response.text)  # print the raw response
-print(f'response:{get_response.json()}')
+    """GET whit Django Rest Framework"""
+    print('-'*20 + 'GET List Create API View' + '-'*20 + '\n')
+
+    token = auth_response.json()['token']
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    endpoint = "http://localhost:8000/api/products/"
+
+    data = {
+        'title': 'This field is done',
+        'price': 32.00
+    }
+
+    get_response = requests.get(url=endpoint, json=data, headers=headers)
+    print(f'response:{get_response.json()}')
 

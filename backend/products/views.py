@@ -17,11 +17,15 @@ from .models import Product
 # permissions
 from . permissions import IsStaffEditorPermission
 
+# authentication token
+from api.authentication import TokenAuthentication
+
 
 # View for create an instance on the DB
 class ProductCreateAPIView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
@@ -42,6 +46,7 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
 
 product_detail_view = ProductDetailAPIView.as_view()
@@ -52,6 +57,7 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_update(self, serializer):
         instance = serializer.save()
@@ -79,7 +85,11 @@ product_delete_view = ProductDestroyAPIView.as_view()
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [authentication.SessionAuthentication]
+    """authentication_classes = [
+        authentication.SessionAuthentication,
+        # authentication.TokenAuthentication
+        TokenAuthentication
+    ]"""
     permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -101,6 +111,7 @@ class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
 
 product_list_view = ProductListAPIView.as_view()
@@ -115,6 +126,7 @@ class ProductMixinView(
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def get(self, request, *args, **kwargs):
         print(args, kwargs)
@@ -143,6 +155,7 @@ product_mixin_view = ProductMixinView.as_view()
 @api_view(['GET', 'POST'])
 def product_alt_view(request,pk=None, *args, **kwargs):
     method = request.method
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     if method == 'GET':
         if pk is not None:
